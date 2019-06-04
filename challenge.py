@@ -3,11 +3,13 @@
 
 #cantina challenge
 
-def getDocument():
-    pass
+import json
+import requests
 
-def parseDocument():
-    pass
+DOCUMENT_URL = "https://raw.githubusercontent.com/jdolan/quetoo/master/src/cgame/default/ui/settings/SystemViewController.json"
+
+def getDocument(url):
+    return requests.get(url).json()
 
 def findLabel():
     pass
@@ -19,6 +21,7 @@ def harness():
             break
         
 if __name__ == "__main__":
-    harness()
+    print ((getDocument(DOCUMENT_URL)))
+    #harness()
     
     
