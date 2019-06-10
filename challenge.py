@@ -3,7 +3,6 @@
 
 #cantina challenge
 
-import json
 import requests
 import pprint
 
@@ -16,8 +15,22 @@ IDENTIFIER = "identifier"
 CLASSNAMES = "classNames"
 CLASS = "class"
 
+
 def getDocument(url):
     return requests.get(url).json()
+
+
+def multipleSelectorSearch(query, doc):
+    if '#' in query and query[0] != '#' and query[-1] != '#':
+        s = query.split("#")
+        return search(("#" + s[1]), search(s[0],doc))             
+                       
+    if '.' in query and query[0] != '.' and query[-1] != '.':
+        s = query.split(".")
+        return search(("." + s[1]), search(s[0],doc)) 
+    
+    return(search(query, doc))
+
 
 def search(query, doc):
 
@@ -33,9 +46,9 @@ def search(query, doc):
             if querytype in doc:
                 if isinstance(doc[querytype], list):
                     for x in doc[querytype]:
-                        if x==query:
+                        if x == query:
                             retval.append(doc)
-                elif doc[querytype]==query:
+                elif doc[querytype] == query:
                     retval.append(doc)
 
             for x in CAN_CONTAIN:
@@ -46,9 +59,9 @@ def search(query, doc):
         
     if query[0] == "#":
         return helper(query[1:], doc, IDENTIFIER)
-    elif query[0] == ".": #classname
+    elif query[0] == ".": 
         return helper(query[1:], doc, CLASSNAMES) 
-    else: #class
+    else: 
         return helper(query, doc, CLASS)
 
 
@@ -63,9 +76,9 @@ def harness(doc):
         query = input("Enter query, or \"EXIT\" to quit\n> ")      
         if query == "EXIT":
             break    
-        views = search(query, doc)
-        if len(views)==0:
-            print("KEY NOT FOUND")
+        views = multipleSelectorSearch(query, doc)
+        if len(views) == 0:
+            print("QUERY NOT FOUND")
         else:
             prettyprint(views)
   
