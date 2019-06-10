@@ -44,6 +44,7 @@ def search(query, doc):
                 
         if isinstance(doc, dict):
             if querytype in doc:
+                #todo: this is causing duplicates when chaining classes and classNames
                 if isinstance(doc[querytype], list):
                     for x in doc[querytype]:
                         if x == query:
